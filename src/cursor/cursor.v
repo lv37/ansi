@@ -1,7 +1,7 @@
 module cursor
 
 import math
-import ansi
+import esc
 
 pub enum CursorMode as u8 {
 	go_home = 72 // H
@@ -25,8 +25,8 @@ fn (e CursorMode) str() string {
 	return u8(e).ascii_str()
 }
 
-fn cursor (mode CursorMode, args ?ansi.Args) {
-	print(ansi.csi(mode.str(), args))
+fn cursor (mode CursorMode, args ?esc.Args) {
+	print(esc.csi(mode.str(), args))
 }
 
 pub fn home() {
@@ -72,15 +72,15 @@ pub fn move(dx i16, dy i16) {
 }
 
 pub fn scroll_up () {
-	print(ansi.no_seq(CursorMode.scroll_up.str(), none))
+	print(esc.no_seq(CursorMode.scroll_up.str(), none))
 }
 
 pub fn dec_save_pos() {
-	print(ansi.no_seq(CursorMode.dec_save_pos.str(), none))
+	print(esc.no_seq(CursorMode.dec_save_pos.str(), none))
 }
 
 pub fn dec_restore_saved_pos() {
-	print(ansi.no_seq(CursorMode.dec_restore_saved_pos.str(), none))
+	print(esc.no_seq(CursorMode.dec_restore_saved_pos.str(), none))
 }
 
 pub fn sco_save_pos() {

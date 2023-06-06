@@ -1,6 +1,6 @@
 module graphics
 
-import ansi
+import esc
 
 pub fn rgb(rgb RGB, layer Layer) !string {
 	if rgb.len != 3 {
@@ -10,17 +10,17 @@ pub fn rgb(rgb RGB, layer Layer) !string {
 	match layer {
 		.both {
 			return
-				ansi.csi(GraphicsMode.graphics.str(), [u8(Layer.fg), 2, rgb[0], rgb[1], rgb[2]]) +
-				ansi.csi(GraphicsMode.graphics.str(), [u8(Layer.bg), 2, rgb[0], rgb[1], rgb[2]])
+				esc.csi(GraphicsMode.graphics.str(), [u8(Layer.fg), 2, rgb[0], rgb[1], rgb[2]]) +
+				esc.csi(GraphicsMode.graphics.str(), [u8(Layer.bg), 2, rgb[0], rgb[1], rgb[2]])
 		}
 		else {}
 	}
 
-	return ansi.csi(GraphicsMode.graphics.str(), [u8(layer), 2, rgb[0], rgb[1], rgb[2]])
+	return esc.csi(GraphicsMode.graphics.str(), [u8(layer), 2, rgb[0], rgb[1], rgb[2]])
 }
 
 pub fn color256(color Color256ID, layer Layer) string {
-	return ansi.csi(GraphicsMode.graphics.str(), [u8(layer), 5, color % 256])
+	return esc.csi(GraphicsMode.graphics.str(), [u8(layer), 5, color % 256])
 }
 
 pub fn color8(color Colors8, layer Layer) string {
@@ -44,10 +44,10 @@ pub fn color8(color Colors8, layer Layer) string {
 		}
 	}
 
-	mut out := ansi.csi(GraphicsMode.graphics.str(), [typed_color_id])
+	mut out := esc.csi(GraphicsMode.graphics.str(), [typed_color_id])
 
 	match layer {
-		.both { out += ansi.csi(GraphicsMode.graphics.str(), [typed_color_id + 10]) }
+		.both { out += esc.csi(GraphicsMode.graphics.str(), [typed_color_id + 10]) }
 		else {}
 	}
 
@@ -55,12 +55,12 @@ pub fn color8(color Colors8, layer Layer) string {
 }
 
 pub fn style(g Styles) string {
-	return ansi.csi(GraphicsMode.graphics.str(), [u8(g)])
+	return esc.csi(GraphicsMode.graphics.str(), [u8(g)])
 }
 
 pub fn clear(opt ClearModeOpt, mode ClearMode) {
 	mut args := []u8{}
 	opt_arg := opt.arg()
 	if opt_arg != none { args << opt_arg }
-	print(ansi.csi(mode.str(), args))
+	print(esc.csi(mode.str(), args))
 }

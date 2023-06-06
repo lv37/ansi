@@ -1,4 +1,4 @@
-module ansi
+module esc
 
 pub enum Sequence as u8 {
 	csi = 91
