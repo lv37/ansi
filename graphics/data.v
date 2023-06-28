@@ -92,8 +92,7 @@ pub enum ClearModeOpt as u8 {
 	clear_in = 254
 	from_cursor_to_end = 0
 	from_cursor_to_start = 1
-	screen = 2
-	above_screen = 3
+	all = 2
 }
 
 fn (e ClearModeOpt) str() string {

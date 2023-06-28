@@ -74,3 +74,7 @@ pub fn clear(opt ClearModeOpt, mode ClearMode) {
 	}
 	print(esc.csi(mode.str(), args))
 }
+
+pub fn reset_scroll() {
+	print(esc.csi(ClearMode.screen.str(), [u8(3)]))
+}
