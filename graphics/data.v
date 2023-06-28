@@ -59,6 +59,8 @@ pub enum Colors8 as u8 {
 	default = 39
 }
 
+pub type Colors = Color256ID | Colors8 | RGB
+
 pub fn id_to_colors8_and_layer(id u8) !(Colors8, Layer) {
 	if !((id >= 30 && id <= 37) || (id >= 40 && id <= 47) || id == 39 || id == 49) {
 		return error('id not in Colors8')
@@ -90,8 +92,8 @@ pub enum ClearModeOpt as u8 {
 	clear_in = 254
 	from_cursor_to_end = 0
 	from_cursor_to_start = 1
-	all = 2
-	// clear_saved = 3
+	screen = 2
+	above_screen = 3
 }
 
 fn (e ClearModeOpt) str() string {

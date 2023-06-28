@@ -2,6 +2,14 @@ module graphics
 
 import esc
 
+pub fn color(color Colors, layer Layer) !string {
+	match color {
+		Colors8 { return color8(color, layer) }
+		Color256ID { return color256(color, layer) }
+		RGB { return rgb(color, layer)! }
+	}
+}
+
 pub fn rgb(rgb RGB, layer Layer) !string {
 	if rgb.len != 3 {
 		return error('rgb must be in format [r,g,b]u8')
@@ -61,6 +69,8 @@ pub fn style(g Styles) string {
 pub fn clear(opt ClearModeOpt, mode ClearMode) {
 	mut args := []u8{}
 	opt_arg := opt.arg()
-	if opt_arg != none { args << opt_arg }
+	if opt_arg != none {
+		args << opt_arg
+	}
 	print(esc.csi(mode.str(), args))
 }

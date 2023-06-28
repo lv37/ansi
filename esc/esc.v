@@ -6,7 +6,7 @@ pub enum Sequence as u8 {
 	osc = 93
 }
 
-pub type Args = []u8 | []u16
+pub type Args = []u16 | []u8
 
 fn (e Sequence) str() string {
 	return u8(e).ascii_str()
@@ -14,13 +14,12 @@ fn (e Sequence) str() string {
 
 pub fn esc(seq ?Sequence, mode string, args ?Args) string {
 	seq_str := seq.str()
-	args_str :=
-		if args != none {
-			match (args or { []u8{} }).type_name() {
-				'[]u8' { (args as []u8).map(it.str()).join(';') }
-				'[]u16' { (args as []u16).map(it.str()).join(';') }
-				else { '' }
-			}
+	args_str := if args != none {
+		match args or { []u8{} }.type_name() {
+			'[]u8' { (args as []u8).map(it.str()).join(';') }
+			'[]u16' { (args as []u16).map(it.str()).join(';') }
+			else { '' }
+		}
 		} else { '' }
 	return '\x1b' + seq_str + args_str + mode
 }
