@@ -49,13 +49,20 @@ pub type Color256ID = u8
 
 pub enum Colors8 as u8 {
 	black = 30
-	red = 31
-	green = 32
-	yellow = 33
-	blue = 34
-	magenta = 35
-	cyan = 36
-	white = 37
+	dark_red = 31
+	dark_green = 32
+	dark_yellow = 33
+	dark_blue = 34
+	dark_magenta = 35
+	dark_cyan = 36
+	gray = 37
+	red = 91
+	green = 92
+	yellow = 93
+	blue = 94
+	magenta = 95
+	cyan = 96
+	white = 97
 	default = 39
 }
 
