@@ -15,16 +15,15 @@ pub fn rgb(rgb RGB, layer Layer) !string {
 		return error('rgb must be in format [r,g,b]u8')
 	}
 
-	match layer {
+	return match layer {
 		.both {
-			return
-				esc.csi(GraphicsMode.graphics.str(), [u8(Layer.fg), 2, rgb[0], rgb[1], rgb[2]]) +
+			esc.csi(GraphicsMode.graphics.str(), [u8(Layer.fg), 2, rgb[0], rgb[1], rgb[2]]) +
 				esc.csi(GraphicsMode.graphics.str(), [u8(Layer.bg), 2, rgb[0], rgb[1], rgb[2]])
 		}
-		else {}
+		else {
+			esc.csi(GraphicsMode.graphics.str(), [u8(layer), 2, rgb[0], rgb[1], rgb[2]])
+		}
 	}
-
-	return esc.csi(GraphicsMode.graphics.str(), [u8(layer), 2, rgb[0], rgb[1], rgb[2]])
 }
 
 pub fn color256(color Color256ID, layer Layer) string {
@@ -33,30 +32,21 @@ pub fn color256(color Color256ID, layer Layer) string {
 
 pub fn color8(color Colors8, layer Layer) string {
 	color_u8 := u8(color)
-	if !((color_u8 >= 30 && color_u8 <= 37) || (color_u8 >= 40 && color_u8 <= 47) ||
-		(color_u8 >= 91 && color_u8 <= 97)  || color_u8 == 39 || color_u8 == 49) {
+	if !((color_u8 >= 30 && color_u8 <= 37) || (color_u8 >= 40 && color_u8 <= 47)
+		|| (color_u8 >= 91 && color_u8 <= 97) || color_u8 == 39 || color_u8 == 49) {
 		panic('invalid id')
 	}
 
-	mut typed_color_id := color_u8
-
-	if color_u8 >= 40 {
-		match layer {
-			.fg, .both { typed_color_id -= 10 }
-			else {}
-		}
+	typed_color_id := if color_u8 >= 40 {
+		if layer == .fg || layer == .both { color_u8 - 10 } else { color_u8 }
 	} else {
-		match layer {
-			.bg { typed_color_id += 10 }
-			else {}
-		}
+		if layer == .bg { color_u8 + 10 } else { color_u8 }
 	}
 
 	mut out := esc.csi(GraphicsMode.graphics.str(), [typed_color_id])
 
-	match layer {
-		.both { out += esc.csi(GraphicsMode.graphics.str(), [typed_color_id + 10]) }
-		else {}
+	if layer == .both {
+		out += esc.csi(GraphicsMode.graphics.str(), [typed_color_id + 10])
 	}
 
 	return out

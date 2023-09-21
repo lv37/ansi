@@ -20,7 +20,9 @@ pub fn esc(seq ?Sequence, mode string, args ?Args) string {
 			'[]u16' { (args as []u16).map(it.str()).join(';') }
 			else { '' }
 		}
-		} else { '' }
+	} else {
+		''
+	}
 	return '\x1b' + seq_str + args_str + mode
 }
 

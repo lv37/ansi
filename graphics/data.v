@@ -1,8 +1,8 @@
 module graphics
 
 pub enum Layer as u8 {
-	fg = 38
-	bg = 48
+	fg   = 38
+	bg   = 48
 	both
 }
 
@@ -15,25 +15,25 @@ fn (e GraphicsMode) str() string {
 }
 
 pub enum Styles as u8 {
-	reset_all = 0
-	bold = 1
-	dim = 2
-	italic = 3
-	underline = 4
-	blink = 5
-	reverse = 7
-	invisible = 8
-	strikethrough = 9
-	reset_bold_and_dim = 22
-	reset_italic = 23
-	reset_underline = 24
-	reset_blink = 25
-	reset_reverse = 27
-	reset_invisible = 28
+	reset_all           = 0
+	bold                = 1
+	dim                 = 2
+	italic              = 3
+	underline           = 4
+	blink               = 5
+	reverse             = 7
+	invisible           = 8
+	strikethrough       = 9
+	reset_bold_and_dim  = 22
+	reset_italic        = 23
+	reset_underline     = 24
+	reset_blink         = 25
+	reset_reverse       = 27
+	reset_invisible     = 28
 	reset_strikethrough = 29
 }
 
-pub fn id_to_graphics(id u8) !Styles {
+pub fn Styles.from_id(id u8) !Styles {
 	if !((id >= 0 && id <= 5) || (id > 5 && id <= 9) || (id >= 20 && id <= 25)
 		|| (id > 25 && id <= 29)) {
 		return error('id not in Styles')
@@ -48,22 +48,22 @@ pub type RGB = []u8
 pub type Color256ID = u8
 
 pub enum Colors8 as u8 {
-	black = 30
-	dark_red = 31
-	dark_green = 32
-	dark_yellow = 33
-	dark_blue = 34
+	black        = 30
+	dark_red     = 31
+	dark_green   = 32
+	dark_yellow  = 33
+	dark_blue    = 34
 	dark_magenta = 35
-	dark_cyan = 36
-	gray = 37
-	red = 91
-	green = 92
-	yellow = 93
-	blue = 94
-	magenta = 95
-	cyan = 96
-	white = 97
-	default = 39
+	dark_cyan    = 36
+	gray         = 37
+	red          = 91
+	green        = 92
+	yellow       = 93
+	blue         = 94
+	magenta      = 95
+	cyan         = 96
+	white        = 97
+	default      = 39
 }
 
 pub type Colors = Color256ID | Colors8 | RGB
@@ -88,7 +88,7 @@ pub fn id_to_colors8_and_layer(id u8) !(Colors8, Layer) {
 
 pub enum ClearMode as u8 {
 	screen = 74 // J
-	line = 75 // K
+	line   = 75 // K
 }
 
 fn (e ClearMode) str() string {
@@ -96,10 +96,10 @@ fn (e ClearMode) str() string {
 }
 
 pub enum ClearModeOpt as u8 {
-	clear_in = 254
-	from_cursor_to_end = 0
+	clear_in             = 254
+	from_cursor_to_end   = 0
 	from_cursor_to_start = 1
-	all = 2
+	all                  = 2
 }
 
 fn (e ClearModeOpt) str() string {
