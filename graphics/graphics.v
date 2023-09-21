@@ -33,9 +33,9 @@ pub fn color256(color Color256ID, layer Layer) string {
 
 pub fn color8(color Colors8, layer Layer) string {
 	color_u8 := u8(color)
-	if !((color_u8 >= 30 && color_u8 <= 37) || (color_u8 >= 40 && color_u8 <= 47)
-		|| color_u8 == 39 || color_u8 == 49) {
-		panic('invalid id') // should be impossible
+	if !((color_u8 >= 30 && color_u8 <= 37) || (color_u8 >= 40 && color_u8 <= 47) ||
+		(color_u8 >= 91 && color_u8 <= 97)  || color_u8 == 39 || color_u8 == 49) {
+		panic('invalid id')
 	}
 
 	mut typed_color_id := color_u8
