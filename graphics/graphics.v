@@ -32,12 +32,7 @@ pub fn color256(color Color256ID, layer Layer) string {
 
 pub fn color8(color Colors8, layer Layer) string {
 	color_u8 := u8(color)
-	if !((color_u8 >= 30 && color_u8 <= 37) || (color_u8 >= 40 && color_u8 <= 47)
-		|| (color_u8 >= 91 && color_u8 <= 97) || color_u8 == 39 || color_u8 == 49) {
-		panic('invalid id')
-	}
-
-	typed_color_id := if color_u8 >= 40 {
+	typed_color_id := if color_u8 > 37 && color_u8 < 91 {
 		if layer == .fg || layer == .both { color_u8 - 10 } else { color_u8 }
 	} else {
 		if layer == .bg { color_u8 + 10 } else { color_u8 }
