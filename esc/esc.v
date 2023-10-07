@@ -14,14 +14,9 @@ fn (e Sequence) str() string {
 
 pub fn esc(seq ?Sequence, mode string, args ?Args) string {
 	seq_str := seq.str()
-	args_str := if args != none {
-		match args or { []u8{} }.type_name() {
-			'[]u8' { (args as []u8).map(it.str()).join(';') }
-			'[]u16' { (args as []u16).map(it.str()).join(';') }
-			else { '' }
-		}
-	} else {
-		''
+	args_str := match args or { return '\x1b' + seq_str + mode } {
+		[]u8 { args.map(it.str()).join(';') }
+		[]u16 { args.map(it.str()).join(';') }
 	}
 	return '\x1b' + seq_str + args_str + mode
 }
