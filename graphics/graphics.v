@@ -1,7 +1,5 @@
 module graphics
 
-import esc
-
 pub fn color(color Colors, layer Layer) !string {
 	match color {
 		Colors8 { return color8(color, layer) }
@@ -10,56 +8,48 @@ pub fn color(color Colors, layer Layer) !string {
 	}
 }
 
-pub fn rgb(rgb RGB, layer Layer) !string {
+pub fn rgb(rgb []u8, layer Layer) !string {
 	if rgb.len != 3 {
 		return error('rgb must be in format [r,g,b]u8')
 	}
 
-	return match layer {
-		.both {
-			esc.csi(GraphicsMode.graphics.str(), [u8(Layer.fg), 2, rgb[0], rgb[1], rgb[2]]) +
-				esc.csi(GraphicsMode.graphics.str(), [u8(Layer.bg), 2, rgb[0], rgb[1], rgb[2]])
-		}
-		else {
-			esc.csi(GraphicsMode.graphics.str(), [u8(layer), 2, rgb[0], rgb[1], rgb[2]])
-		}
+	return if layer == .both {
+		'\x1b[38' + rgb.map(|u| u.str()).join(';') + 'm' + '\x1b[48' +
+			rgb.map(|u| u.str()).join(';') + 'm'
+	} else {
+		'\x1b[' + u8(layer).str() + rgb.map(|u| u.str()).join(';') + 'm'
 	}
 }
 
 pub fn color256(color Color256ID, layer Layer) string {
-	return esc.csi(GraphicsMode.graphics.str(), [u8(layer), 5, color % 256])
+	return '\x1b[' + u8(layer).str() + '5' + (color % 256).str() + 'm'
 }
 
 pub fn color8(color Colors8, layer Layer) string {
 	color_u8 := u8(color)
-	typed_color_id := if color_u8 > 39 && color_u8 < 91 {
-		if layer == .fg || layer == .both { color_u8 - 10 } else { color_u8 }
+	return if color_u8 > 39 && color_u8 < 91 {
+		if layer == .fg {
+			'\x1b[' + (color_u8 - 10).str() + 'm'
+		} else if layer == .both {
+			'\x1b[' + (color_u8 - 10).str() + 'm\x1b[' + color_u8.str() + 'm'
+		} else {
+			'\x1b[' + color_u8.str() + 'm'
+		}
+	} else if layer == .bg {
+		'\x1b[' + (color_u8 + 10).str() + 'm'
 	} else {
-		if layer == .bg { color_u8 + 10 } else { color_u8 }
+		'\x1b[' + color_u8.str() + 'm'
 	}
-
-	mut out := esc.csi(GraphicsMode.graphics.str(), [typed_color_id])
-
-	if layer == .both {
-		out += esc.csi(GraphicsMode.graphics.str(), [typed_color_id + 10])
-	}
-
-	return out
 }
 
 pub fn style(g Styles) string {
-	return esc.csi(GraphicsMode.graphics.str(), [u8(g)])
+	return '\x1b[' + u8(g).str() + 'm'
 }
 
 pub fn clear(opt ClearModeOpt, mode ClearMode) {
-	mut args := []u8{}
-	opt_arg := opt.arg()
-	if opt_arg != none {
-		args << opt_arg
-	}
-	print(esc.csi(mode.str(), args))
+	print('\x1b[' + opt.str() + mode.str())
 }
 
 pub fn reset_scroll() {
-	print(esc.csi(ClearMode.screen.str(), [u8(3)]))
+	print('\x1b[3J')
 }
