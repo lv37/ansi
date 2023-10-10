@@ -10,8 +10,8 @@ pub fn color(color Colors, layer Layer) !string {
 
 pub fn rgb(r u8, g u8, b u8, layer Layer) !string {
 	return if layer == .both {
-		'\x1b[38;2;' + r + ';' + g + ';' + b + 'm' + '\x1b[48' +
-			rgb.map(|u| u.str()).join(';') + 'm'
+		'\x1b[38;2;' + r + ';' + g + ';' + b + 'm' + '\x1b[48;2;' +
+			r + ';' + g + ';' + b + 'm'
 	} else {
 		'\x1b[' + u8(layer).str() + ';2;' + r + ';' + g + ';' + b + 'm'
 	}
