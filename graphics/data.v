@@ -44,7 +44,6 @@ pub fn Styles.from_id(id u8) !Styles {
 	}
 }
 
-pub type RGB = []u8
 pub type Color256ID = u8
 
 pub enum Colors8 as u8 {
