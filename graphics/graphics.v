@@ -14,10 +14,10 @@ pub fn rgb(rgb []u8, layer Layer) !string {
 	}
 
 	return if layer == .both {
-		'\x1b[38' + rgb.map(|u| u.str()).join(';') + 'm' + '\x1b[48' +
+		'\x1b[38;2;' + rgb.map(|u| u.str()).join(';') + 'm' + '\x1b[48' +
 			rgb.map(|u| u.str()).join(';') + 'm'
 	} else {
-		'\x1b[' + u8(layer).str() + rgb.map(|u| u.str()).join(';') + 'm'
+		'\x1b[' + u8(layer).str() + ';2;' + rgb.map(|u| u.str()).join(';') + 'm'
 	}
 }
 
@@ -37,6 +37,8 @@ pub fn color8(color Colors8, layer Layer) string {
 		}
 	} else if layer == .bg {
 		'\x1b[' + (color_u8 + 10).str() + 'm'
+	} else if layer == .both {
+		'\x1b[' + (color_u8 + 10).str() + 'm\x1b[' + color_u8.str() + 'm'
 	} else {
 		'\x1b[' + color_u8.str() + 'm'
 	}
