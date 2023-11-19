@@ -1,6 +1,6 @@
 module graphics
 
-pub fn color(color Colors, layer Layer) !string {
+pub fn color(color Colors, layer Layer) string {
 	match color {
 		Colors8 { return color8(color, layer) }
 		Color256ID { return color256(color, layer) }
