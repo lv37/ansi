@@ -4,17 +4,17 @@ pub fn color(color Colors, layer Layer) !string {
 	match color {
 		Colors8 { return color8(color, layer) }
 		Color256ID { return color256(color, layer) }
-		RGB { return rgb(color[0], color[1], color[2], layer)! }
+		RGB { return rgb(color[0], color[1], color[2], layer) }
 	}
 }
 
-pub fn rgb(r u8, g u8, b u8, layer Layer) !string {
+pub fn rgb(r u8, g u8, b u8, layer Layer) string {
 	rstr := r.str()
 	gstr := g.str()
 	bstr := b.str()
 	return if layer == .both {
-		'\x1b[38;2;' + rstr + ';' + gstr + ';' + bstr + 'm' + '\x1b[48;2;' +
-			rstr + ';' + gstr + ';' + bstr + 'm'
+		'\x1b[38;2;' + rstr + ';' + gstr + ';' + bstr + 'm' + '\x1b[48;2;' + rstr + ';' + gstr +
+			';' + bstr + 'm'
 	} else {
 		'\x1b[' + u8(layer).str() + ';2;' + rstr + ';' + gstr + ';' + bstr + 'm'
 	}

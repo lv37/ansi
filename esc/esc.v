@@ -8,7 +8,7 @@ pub enum Sequence as u8 {
 
 pub type Args = []u16 | []u8
 
-[inline]
+@[inline]
 fn (e Sequence) str() string {
 	return u8(e).ascii_str()
 }
@@ -23,22 +23,22 @@ pub fn esc(seq ?Sequence, mode string, args ?Args) string {
 	return '\x1b' + seq_str + args_str + mode
 }
 
-[inline]
+@[inline]
 pub fn csi(mode string, args ?Args) string {
 	return esc(Sequence.csi, mode, args)
 }
 
-[inline]
+@[inline]
 pub fn dcs(mode string, args ?Args) string {
 	return esc(Sequence.dcs, mode, args)
 }
 
-[inline]
+@[inline]
 pub fn osc(mode string, args ?Args) string {
 	return esc(Sequence.osc, mode, args)
 }
 
-[inline]
+@[inline]
 pub fn no_seq(mode string, args ?Args) string {
 	return esc(none, mode, args)
 }

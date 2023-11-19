@@ -3,7 +3,7 @@ module cursor
 import math
 import esc
 
-[inline]
+@[inline]
 pub fn home() {
 	print('\x1b[H')
 }
@@ -43,33 +43,33 @@ pub fn move(dx i16, dy i16) {
 	}
 }
 
-[inline]
+@[inline]
 pub fn scroll_up() {
 	print(esc.no_seq('M', none))
 }
 
-[inline]
+@[inline]
 pub fn dec_save_pos() {
 	print(esc.no_seq('7', none))
 }
 
-[inline]
+@[inline]
 pub fn dec_restore_saved_pos() {
 	print(esc.no_seq('8', none))
 }
 
-[inline]
+@[inline]
 pub fn sco_save_pos() {
 	print('\x1b[s')
 }
 
-[inline]
+@[inline]
 pub fn sco_restore_saved_pos() {
 	print('\x1b[u')
 }
 
 // write position to stdin
-[inline]
+@[inline]
 pub fn request_pos() {
 	print('\x1b[6n')
 }
